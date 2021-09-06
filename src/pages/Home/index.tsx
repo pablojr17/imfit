@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { FlatList, Text } from "react-native";
 import CalendarStrip from "react-native-calendar-strip";
 import { useNavigation } from "@react-navigation/native";
 import { FAB } from "react-native-elements";
 import { Feather } from "@expo/vector-icons";
 import moment from "moment";
-
 import { useData } from "../../hooks/data";
+import * as FileSystem from 'expo-file-system';
 
 import {
   Container,
@@ -18,14 +18,22 @@ import {
   BodyContainer,
 } from "./styles";
 import ItemList from "../../components/ItemList";
+import {  Modal } from 'react-native';
+import ModalKcal from "../../components/ModalKcal";
 
 function Home() {
   const navigation = useNavigation();
   const { handleChangeDate, currentList, currentKcal, currentDate } = useData();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleOneNewItem = (): void => {
     navigation.navigate("NewItem");
   };
+  
+  const handleViewData = (): void => {
+    setModalVisible(true);
+  };
+
 
   return (
     <Container>
@@ -74,15 +82,18 @@ function Home() {
           style={{ marginRight: 5, right: 5, bottom: 20 }}
           onPress={handleOneNewItem}
         />
-         <FAB
-          icon={<Feather name="download" size={20} color="white" />}
+        <FAB
+          icon={<Feather name="info" size={20} color="white" />}
           visible={true}
           placement="right"
           color="#7ED957"
           style={{ marginRight: 35, right: 35, bottom: 20 }}
-          onPress={handleOneNewItem}
+          onPress={handleViewData}
         />
       </BodyContainer>
+      <Modal visible={modalVisible} transparent animationType="slide">
+        <ModalKcal onClose={() => setModalVisible(false)} data={currentKcal} />
+      </Modal>
     </Container>
   );
 }

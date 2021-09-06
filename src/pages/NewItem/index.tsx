@@ -46,6 +46,8 @@ const NewItem = () => {
       <ButtonContainer>
         <Button title="Salvar" onPress={handleOnSave} />
       </ButtonContainer>
+
+   
     </Container>
   );
 };
